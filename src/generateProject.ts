@@ -16,7 +16,7 @@ export async function generateProject(options: Options) {
   zip.file("index.html", `<!DOCTYPE html>
 <html>
 <head>
-  <title>My Blaunch App</title>
+  <title>My BunPlay App</title>
 </head>
 <body>
   <div id="app"></div>

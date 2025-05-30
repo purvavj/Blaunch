@@ -1,82 +1,104 @@
+import React, { useState, useEffect } from "react";
+import Editor from "./Editor";
+import Preview from "./Preview";
+import { getSnippet } from "./snippets";
 import "./App.css";
-import { useState } from "react";
-import { generateProject } from "./generateProject";
-import LivePreview from "./components/LivePreview";
-
 
 function App() {
-  const [framework, setFramework] = useState<"react" | "vue" | "vanilla">("react");
-  const [options, setOptions] = useState({
-    typescript: true,
-    tailwind: false,
-    prettier: false,
-  });
+  // form state
+  const [framework, setFramework] = useState<"react" | "vanilla">("react");
+  const [language, setLanguage] = useState<"typescript" | "javascript">(
+    "typescript"
+  );
 
-  const toggleOption = (key: keyof typeof options) => {
-    setOptions({ ...options, [key]: !options[key] });
-  };
+  // code in the editor
+  const [code, setCode] = useState<string>("");
 
-  const handleGenerate = () => {
-    generateProject({ framework, ...options });
-  };
+  // bump to re-run preview
+  const [runTrigger, setRunTrigger] = useState(0);
+
+  // reset snippet on framework/language change
+  useEffect(() => {
+    setCode(getSnippet(framework, language));
+  }, [framework, language]);
 
   return (
-  <>
-    <video autoPlay muted loop playsInline className="background-video">
-      <source src="/bg1.mp4" type="video/mp4" />
-    </video>
-    <div className="app-background" />    
+    <>
+      {/* Background video */}
+      <video autoPlay muted loop playsInline className="background-video">
+        <source src="/bg1.mp4" type="video/mp4" />
+      </video>
+      <div className="app-background" />
 
-    <img
-      src="/logo.png"
-      alt="Bun logo"
-      className="bun-logo"
-    />
+      {/* Neon Bun logo */}
+      <img src="/logo.png" alt="Bun logo" className="bun-logo" />
 
-    {/* Updated layout wrapper */}
-    <main className="blaunch-container">
-      {/* Left side: form */}
-      <div className="form-pane">
-        <h1>Blaunch</h1>
-        <p>Instantly generate a Bun-powered frontend starter kit.</p>
+      {/* Two-column layout */}
+      <main className="bunplay-layout-horizontal">
+        {/* LEFT: form + editor + run */}
+        <div className="left-stack">
+          <div className="form-header compact">
+            <h1>BunPlay</h1>
+            <p>A playground for beginners learning React and JavaScript.</p>
 
-        <section>
-          <h3>Choose your framework:</h3>
-          {["react", "vue", "vanilla"].map((fw) => (
-            <label key={fw} style={{ display: "block", marginBottom: "0.5rem" }}>
-              <input
-                type="radio"
-                name="framework"
-                value={fw}
-                checked={framework === fw}
-                onChange={() => setFramework(fw as "react" | "vue" | "vanilla")}
-              />
-              {fw.charAt(0).toUpperCase() + fw.slice(1)}
-            </label>
-          ))}
+            {/* Framework selector */}
+            <div className="field-group">
+              <h3>Select a framework:</h3>
+              <div className="inline-options">
+                {(["react", "vanilla"] as const).map((fw) => (
+                  <label key={fw}>
+                    <input
+                      type="radio"
+                      name="framework"
+                      value={fw}
+                      checked={framework === fw}
+                      onChange={() => setFramework(fw)}
+                    />
+                    {fw[0].toUpperCase() + fw.slice(1)}
+                  </label>
+                ))}
+              </div>
+            </div>
 
-          <h3>Optional tools:</h3>
-          {["typescript", "tailwind", "prettier"].map((opt) => (
-            <label key={opt} style={{ display: "block", marginBottom: "0.5rem" }}>
-              <input
-                type="checkbox"
-                checked={options[opt as keyof typeof options]}
-                onChange={() => toggleOption(opt as keyof typeof options)}
-              />
-              {opt.charAt(0).toUpperCase() + opt.slice(1)}
-            </label>
-          ))}
+            {/* Language selector */}
+            <div className="field-group">
+              <h3>Language:</h3>
+              <div className="inline-options">
+                {(["typescript", "javascript"] as const).map((lang) => (
+                  <label key={lang}>
+                    <input
+                      type="radio"
+                      name="language"
+                      value={lang}
+                      checked={language === lang}
+                      onChange={() => setLanguage(lang)}
+                    />
+                    {lang[0].toUpperCase() + lang.slice(1)}
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
 
-          <button onClick={handleGenerate}>Generate Project</button>
-        </section>
-      </div>
+          {/* Code editor */}
+          <Editor code={code} setCode={setCode} />
 
-      {/* Right side: live preview */}
-      <div className="preview-pane">
-        <LivePreview framework={framework} options={options} />
-      </div>
-    </main>
-  </>
+          {/* Run button */}
+          <button
+            className="run-button"
+            onClick={() => setRunTrigger((n) => n + 1)}
+          >
+            Run Code
+          </button>
+        </div>
+
+        {/* RIGHT: live preview */}
+        <div className="right-pane">
+          <h3 style={{ marginBottom: "0.5rem" }}>Preview:</h3>
+          <Preview code={code} runTrigger={runTrigger} />
+        </div>
+      </main>
+    </>
   );
 }
 
