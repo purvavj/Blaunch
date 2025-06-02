@@ -42,14 +42,14 @@ html, body, #root {
   background: rgba(255,255,255,0.05);
   backdrop-filter: blur(16px);
   border-radius: 1rem;
-  padding: 1.2rem 1.5rem;
+  padding:1.2rem 1.5rem;
   box-shadow: 0 0 20px rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.1);
   font-size: 0.9rem; line-height: 1.4; color: #fff;
 }
 .form-header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
 .form-header p {
-  margin: 0.5rem 0 1rem; font-size: 0.95rem; color: #ccc;
+  margin: 0.5rem 0 1rem; font-size: 0.95rem; color: #f1f427;
 }
 .field-group {
   display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
@@ -62,7 +62,7 @@ html, body, #root {
   display: flex; align-items: center; gap: 0.3rem;
 }
 input[type="radio"], input[type="checkbox"] {
-  accent-color: #8c00ff; transform: scale(1.2) translateY(2px);
+  accent-color: #8c00ff; transform: scale(1.2) translateY(0px);
 }
 
 /* EDITOR */
@@ -101,6 +101,6 @@ textarea.editor {
   border-radius: 1rem; padding: 0.8rem;
   box-shadow: 0 0 10px rgba(140,0,255,0.2);
   border: 1px solid rgba(255,255,255,0.08);
-  font-size: 0.8rem; color: #e0e0ff;
+  font-size: 0.8rem; color: #f1f1f1;
   display: flex; flex-direction: column;
 }
